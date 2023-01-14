@@ -1,0 +1,63 @@
+version: "3"
+services:
+  db:
+    image: mysql:8.0
+    container_name: carefer-db
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    ports:
+      - ${DOCKER_DB_PORT}:3306
+    volumes:
+      - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+      - databaseVolume:/var/lib/mysql
+    networks:
+      - carefer
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+
+  nginx:
+    image: nginx:alpine
+    container_name: carefer-nginx
+    restart: unless-stopped
+    ports:
+      - ${DOCKER_APP_PORT}:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - carefer
+
+  app:
+    tty: true
+    build:
+      args:
+        user: ${DOCKER_BASH_USER}
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: carefer
+    container_name: carefer-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/startup:/var/www/build
+    networks:
+      - carefer
+    depends_on:
+      db: 
+        condition: service_healthy
+
+networks:
+  carefer:
+    driver: bridge
+
+volumes:
+  databaseVolume:
