@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Slots;
+use App\Models\TripSlot;
 use Illuminate\Database\Seeder;
 
 class SlotsSeeder extends Seeder
@@ -14,6 +14,6 @@ class SlotsSeeder extends Seeder
      */
     public function run()
     {
-        Slots::factory()->count(5)->create();
+        TripSlot::factory()->count(5)->create();
     }
 }

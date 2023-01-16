@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Slots extends Model
+class TripSlot extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,7 @@ class Slots extends Model
     protected $fillable = [
         'trip_id',
         'time',
+        'day_of_week'
     ];
 
     /**
@@ -27,6 +28,8 @@ class Slots extends Model
     protected $casts = [
         'id' => 'integer',
         'trip_id' => 'integer',
+        'time' => 'time',
+        'day_of_week' => 'integer'
     ];
 
     public function trip()

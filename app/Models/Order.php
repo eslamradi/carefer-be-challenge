@@ -20,6 +20,7 @@ class Order extends Model
         'trip_id',
         'bus_id',
         'time',
+        'date',
         'total',
         'discount',
     ];
@@ -36,6 +37,8 @@ class Order extends Model
         'bus_id' => 'integer',
         'total' => 'float',
         'discount' => 'float',
+        'time' => 'datetime:H:i:s',
+        'date' => 'datetime:Y-m-d',
     ];
 
     public function discounts()

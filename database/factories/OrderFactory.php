@@ -25,13 +25,15 @@ class OrderFactory extends Factory
      */
     public function definition()
     {
+        $orderAmount = $this->faker->randomFloat(2, 0, 5000);
         return [
             'user_id' => User::factory(),
             'trip_id' => Trip::factory(),
             'bus_id' => Bus::factory(),
             'time' => $this->faker->time(),
-            'total' => $this->faker->randomFloat(2, 0, 999999.99),
-            'discount' => $this->faker->randomFloat(2, 0, 999999.99),
+            'date' => $this->faker->date(),
+            'total' => $orderAmount,
+            'discount' => $this->faker->randomFloat(2, 0, $orderAmount / 2),
         ];
     }
 }

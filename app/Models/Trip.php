@@ -38,7 +38,7 @@ class Trip extends Model
 
     public function slots()
     {
-        return $this->hasMany(\App\Models\Slots::class);
+        return $this->hasMany(\App\Models\TripSlot::class);
     }
 
     public function startDestination()

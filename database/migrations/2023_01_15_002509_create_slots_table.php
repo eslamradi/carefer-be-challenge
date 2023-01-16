@@ -15,10 +15,11 @@ class CreateSlotsTable extends Migration
     {
         Schema::disableForeignKeyConstraints();
 
-        Schema::create('slots', function (Blueprint $table) {
+        Schema::create('trip_slots', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trip_id')->constrained();
             $table->time('time');
+            $table->enum('day_of_week', [1,2,3,4,5,6,7]);
             $table->timestamps();
         });
 
