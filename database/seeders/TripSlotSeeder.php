@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\TripSlot;
 use Illuminate\Database\Seeder;
 
-class SlotsSeeder extends Seeder
+class TripSlotSeeder extends Seeder
 {
     /**
      * Run the database seeds.
