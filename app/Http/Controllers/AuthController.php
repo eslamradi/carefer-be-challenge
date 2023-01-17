@@ -39,7 +39,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request, UserRepository $userRepository)
     {
-        $user = $userRepository->create($request->validated());
+        $user = $userRepository->createCustomer($request->validated());
 
         $token = Auth::login($user);
 

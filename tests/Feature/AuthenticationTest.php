@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -9,19 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
+use Tests\TestCaseWithAcceptJson;
 
-class AuthenticationTest extends TestCase
+class AuthenticationTest extends TestCaseWithAcceptJson
 {
     use DatabaseTransactions;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-        // set your headers here
-        $this->withHeaders([
-            'Accept' => 'application/json'
-        ]);
-    }
 
     public function test_register_validation()
     {
@@ -64,8 +57,11 @@ class AuthenticationTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson(
             fn (AssertableJson $json) =>
-            $json->has('data.authorization.token')->has('data.user')->etc()
-        );
+            $json->has('data.authorization.token')
+                ->has('data.user')
+                ->etc()
+            // check user is registered as a customer
+        )->assertJsonPath('data.user.role', Role::CUSTOMER);
     }
 
     public function test_login_successful()

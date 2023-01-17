@@ -21,6 +21,7 @@ class User extends Authenticatable implements JWTSubject
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -60,5 +61,15 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    /**
+     * check if user has the specified role
+     *
+     * @return boolean
+     */
+    public function hasRole($role)
+    {
+        return $this->role == $role;
     }
 }
