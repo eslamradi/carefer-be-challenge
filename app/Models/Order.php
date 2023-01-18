@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -19,26 +20,11 @@ class Order extends Model
         'user_id',
         'trip_id',
         'bus_id',
+        'slot_id',
         'time',
         'date',
         'total',
         'discount',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'user_id' => 'integer',
-        'trip_id' => 'integer',
-        'bus_id' => 'integer',
-        'total' => 'float',
-        'discount' => 'float',
-        'time' => 'datetime:H:i:s',
-        'date' => 'datetime:Y-m-d',
     ];
 
     public function discounts()
@@ -64,5 +50,10 @@ class Order extends Model
     public function bus()
     {
         return $this->belongsTo(Bus::class);
+    }
+
+    public function slot()
+    {
+        return $this->belongsTo(Slot::class);
     }
 }

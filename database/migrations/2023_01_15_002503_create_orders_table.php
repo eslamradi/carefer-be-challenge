@@ -20,6 +20,7 @@ class CreateOrdersTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('trip_id')->constrained();
             $table->foreignId('bus_id')->constrained();
+            $table->foreignId('slot_id')->constrained();
             $table->time('time');
             $table->date('date');
             $table->float('total', 8, 2);

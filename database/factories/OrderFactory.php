@@ -30,6 +30,7 @@ class OrderFactory extends Factory
             'user_id' => User::factory(),
             'trip_id' => Trip::factory(),
             'bus_id' => Bus::factory(),
+            'slot_id' => Slot::factory(),
             'time' => $this->faker->time(),
             'date' => $this->faker->date(),
             'total' => $orderAmount,
