@@ -4,10 +4,12 @@ namespace Tests\Unit;
 
 use App\Models\Slot;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase as TestsTestCase;
 
 class NextSlotDateTest extends TestsTestCase
 {
+    use DatabaseTransactions;
     /**
      * A basic unit test example.
      *
@@ -35,25 +37,26 @@ class NextSlotDateTest extends TestsTestCase
         $this->assertTrue($slotDate->addWeek()->toDateString() == $slot->getNextAvailableDate());
     }
 
-    public function test_slot_today_due()
+    public function test_slot_today_not_available()
     {
         $slotDate = Carbon::now();
 
         $slot = Slot::factory()->create([
             'day_of_week' => $slotDate->dayOfWeek,
-            'time' => $slotDate->subHour()->toTimeString()
+            'time' => $slotDate->subMinute()->toTimeString()
         ]);
         $this->assertTrue($slotDate->addWeek()->toDateString() == $slot->getNextAvailableDate());
     }
 
-    public function test_slot_today_not_due()
+    public function test_slot_today_available()
     {
         $slotDate = Carbon::now();
 
         $slot = Slot::factory()->create([
             'day_of_week' => $slotDate->dayOfWeek,
-            'time' => $slotDate->addHour()->toTimeString()
+            'time' => $slotDate->addMinute()->toTimeString()
         ]);
+        
         $this->assertTrue($slotDate->toDateString() == $slot->getNextAvailableDate());
     }
 }

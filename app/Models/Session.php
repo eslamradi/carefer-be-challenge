@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Session extends Model
 {
@@ -19,8 +20,18 @@ class Session extends Model
      */
     protected $fillable = [
         'uuid',
-        'slot_id'
+        'slot_id',
+        'user_id'
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($item) {
+            $item->uuid = (string) Str::uuid();
+        });
+    }
 
     public function slot()
     {

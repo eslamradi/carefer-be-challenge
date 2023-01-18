@@ -6,6 +6,7 @@ use App\Http\Middleware\ValidateBookingSession;
 use App\Models\Session;
 use App\Models\Slot;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Tests\TestCaseWithAcceptJson;
 
@@ -18,17 +19,30 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
      */
     public function test_no_session()
     {
+        Session::truncate();
+        
         $user = User::factory()->customer()->create();
         $slot = Slot::factory()->create();
 
         $this->actingAs($user);
 
-        $request = Request::create('/order', 'POST', [
-            'slotId' => $slot->id
+        $request = Request::create('/api/order', 'POST', [
+            'slot_id' => $slot->id
         ]);
 
         $middleware = new ValidateBookingSession();
 
+
+        $response = $middleware->handle($request, function () {
+        });
+
+        $this->assertEquals($response->getStatusCode(), 403);
+
+        $request = Request::create('/api/session/start', 'POST', [
+            'slot_id' => $slot->id,
+            'debug' => true
+        ]);
+        
         $check = false;
         $middleware->handle($request, function ($req) use (&$check) {
             $check = true;
@@ -44,7 +58,7 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
 
         $this->actingAs($user);
 
-        $request = Request::create('/order', 'POST');
+        $request = Request::create('/api/order', 'POST');
 
         $middleware = new ValidateBookingSession();
 
@@ -67,8 +81,8 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
 
         $this->actingAs($otherUser);
 
-        $request = Request::create('/order', 'POST', [
-            'slotId' => $slot->id
+        $request = Request::create('/api/order', 'POST', [
+            'slot_id' => $slot->id
         ]);
 
         $middleware = new ValidateBookingSession();
@@ -91,8 +105,8 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
 
         $this->actingAs($user);
 
-        $request = Request::create('/order', 'POST', [
-            'slotId' => $slot->id
+        $request = Request::create('/api/order', 'POST', [
+            'slot_id' => $slot->id
         ]);
 
         $middleware = new ValidateBookingSession();

@@ -6,6 +6,7 @@ use App\Helpers\UnifiedJsonResponse;
 use App\Models\Slot;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class ValidateBookingSession
 {
@@ -18,7 +19,7 @@ class ValidateBookingSession
      */
     public function handle(Request $request, Closure $next)
     {
-        $slotId = $request->input('slotId');
+        $slotId = $request->input('slot_id');
 
         if (! $slotId) {
             return UnifiedJsonResponse::error([
@@ -31,13 +32,16 @@ class ValidateBookingSession
         $session = $slot->session()->latest()->first();
 
         if ($session && $session->isValid()) {
-            if ($session->user_id == auth()->user()->id) {
+            if ($session->user_id == auth()->user()->id && ! $request->is('api/session/start')) {
                 return $next($request);
             } else {
                 return UnifiedJsonResponse::error([], __('Slot is not available for reservation'), 403);
             }
         }
-
-        return $next($request);
+        if ($request->is('api/session/start')) {
+            return $next($request);
+        } else {
+            return UnifiedJsonResponse::error([], __('Session is not initialized'), 403);
+        }
     }
 }

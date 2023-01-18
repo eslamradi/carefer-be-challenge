@@ -16,7 +16,7 @@ class BookingController extends Controller
 
         return UnifiedJsonResponse::success([
             'session' => [
-                'id' => $session->id,
+                'id' => $session->uuid,
                 'duration' => Session::DURATION
                 ]
         ], __('Session Started Successfuly'), 201);

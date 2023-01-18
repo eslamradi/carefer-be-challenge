@@ -36,9 +36,9 @@ Route::controller(BusesController::class)->group(function () {
     Route::get('bus/{busId}/slot/{slotId}/available', 'getAvailableSeats');
 });
 
-Route::middleware(ValidateBookingSession::class)->group(function () {
-    Route::controller(BookingController::class)->group(function () {
-        Route::post('session/start', 'startSession');
+Route::controller(BookingController::class)->group(function () {
+    Route::middleware(['auth:api', ValidateBookingSession::class])->group(function () {
+        Route::post('session/start', 'startSession')->name('session.start');
         Route::post('order', 'order');
     });
 });
