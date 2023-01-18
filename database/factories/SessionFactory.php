@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Bus;
 use App\Models\Session;
+use App\Models\Slot;
+use App\Models\User;
 
 class SessionFactory extends Factory
 {
@@ -25,7 +27,8 @@ class SessionFactory extends Factory
     {
         return [
             'uuid' => $this->faker->uuid,
-            'bus_id' => Bus::factory(),
+            'slot_id' => Slot::factory(),
+            'user_id' => User::factory()->customer()
         ];
     }
 }

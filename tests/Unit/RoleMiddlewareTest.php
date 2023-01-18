@@ -24,11 +24,14 @@ class RoleMiddlewareTest extends TestCaseWithAcceptJson
 
         $request = Request::create('/', 'GET');
 
-        $middleware = new RoleMiddleware;
+        $middleware = new RoleMiddleware();
 
-        $middleware->handle($request, function ($req) {
-            $this->assertTrue(true);
+        $check = false;
+        $middleware->handle($request, function ($req) use (&$check) {
+            $check = true;
         }, Role::ADMIN);
+
+        $this->assertTrue($check);
     }
 
     /**
@@ -44,7 +47,7 @@ class RoleMiddlewareTest extends TestCaseWithAcceptJson
 
         $request = Request::create('/', 'GET');
 
-        $middleware = new RoleMiddleware;
+        $middleware = new RoleMiddleware();
 
         $response = $middleware->handle($request, function () {
         }, Role::ADMIN);

@@ -42,7 +42,12 @@ class Slot extends Model
         } else {
             $diff = (7 + $this->day_of_week) - $todaysDayOfWeek;
         }
-        
+
         return $today->addDays($diff)->toDateString();
+    }
+
+    public function session()
+    {
+        return $this->hasMany(Session::class);
     }
 }

@@ -18,7 +18,8 @@ class CreateSessionsTable extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->foreignId('bus_id')->constrained();
+            $table->foreignId('slot_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
 

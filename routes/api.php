@@ -3,8 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BusesController;
 use App\Http\Controllers\TripsController;
+use App\Http\Middleware\ValidateBookingSession;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +34,11 @@ Route::controller(TripsController::class)->group(function () {
 Route::controller(BusesController::class)->group(function () {
     Route::get('trip/{tripId}/buses', 'list');
     Route::get('bus/{busId}/slot/{slotId}/available', 'getAvailableSeats');
+});
+
+Route::middleware(ValidateBookingSession::class)->group(function () {
+    Route::controller(BookingController::class)->group(function () {
+        Route::post('session/start', 'startSession');
+        Route::post('order', 'order');
+    });
 });

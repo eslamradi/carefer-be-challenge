@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Session extends Model
 {
     use HasFactory;
+
+    public const DURATION = 2;
 
     /**
      * The attributes that are mass assignable.
@@ -16,21 +19,24 @@ class Session extends Model
      */
     protected $fillable = [
         'uuid',
-        'bus_id',
+        'slot_id'
     ];
+
+    public function slot()
+    {
+        return $this->belongsTo(Slot::class);
+    }
 
     /**
-     * The attributes that should be cast to native types.
+     * check if session is available for interactions
      *
-     * @var array
+     * @return boolean
      */
-    protected $casts = [
-        'id' => 'integer',
-        'bus_id' => 'integer',
-    ];
-
-    public function bus()
+    public function isValid()
     {
-        return $this->belongsTo(Bus::class);
+        $startTime = Carbon::parse($this->created_at);
+        $diff = $startTime->diffInMinutes(Carbon::now());
+
+        return $diff < self::DURATION;
     }
 }
