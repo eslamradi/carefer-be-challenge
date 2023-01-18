@@ -33,6 +33,10 @@ class Bus extends Model
         'active' => 'boolean',
     ];
 
+    protected $with = [
+        'slots'
+    ];
+
     public function seats()
     {
         return $this->hasMany(Seat::class);
@@ -46,5 +50,10 @@ class Bus extends Model
     public function trip()
     {
         return $this->belongsTo(Trip::class);
+    }
+
+    public function slots()
+    {
+        return $this->hasMany(Slot::class);
     }
 }

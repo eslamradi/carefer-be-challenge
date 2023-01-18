@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BusesController;
 use App\Http\Controllers\TripsController;
 
 /*
@@ -26,4 +27,9 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::controller(TripsController::class)->group(function () {
     Route::get('trip', 'list');
+});
+
+Route::controller(BusesController::class)->group(function () {
+    Route::get('trip/{tripId}/buses', 'list');
+    Route::get('bus/{busId}/slot/{slotId}/available', 'getAvailableSeats');
 });

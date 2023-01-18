@@ -24,10 +24,10 @@ class DiscountFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(4),
-            'seats_count' => $this->faker->numberBetween(-10000, 10000),
-            'percentage' => $this->faker->randomFloat(2, 0, 999999.99),
-            'amount' => $this->faker->randomFloat(2, 0, 999999.99),
-            'max_amount' => $this->faker->randomFloat(2, 0, 999999.99),
+            'seats_count' => $this->faker->numberBetween(0, 10),
+            'percentage' => $this->faker->randomFloat(2, 0, 100),
+            'amount' => $this->faker->randomFloat(2, 0, 200),
+            'max_amount' => $this->faker->randomFloat(2, 0, 200),
         ];
     }
 }

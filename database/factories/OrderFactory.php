@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Bus;
 use App\Models\Order;
+use App\Models\Slot;
 use App\Models\Trip;
 use App\Models\User;
 

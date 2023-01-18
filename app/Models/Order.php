@@ -34,7 +34,7 @@ class Order extends Model
 
     public function seats()
     {
-        return $this->hasMany(Seat::class);
+        return $this->hasManyThrough(Seat::class, OrderSeat::class, 'order_id', 'id', 'id', 'seat_id');
     }
 
     public function user()
