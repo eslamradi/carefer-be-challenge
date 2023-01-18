@@ -8,6 +8,7 @@ use App\Models\Bus;
 use App\Models\Destination;
 use App\Models\Seat;
 use App\Models\Trip;
+use App\Models\Slot;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -31,7 +32,6 @@ class DatabaseSeeder extends Seeder
 
         try {
             if (Destination::count() == 0) {
-
                 $cairo = Destination::create([
                     'title' => 'Cairo'
                 ]);
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
                         'distance' => 90
                     ]);
 
+
                     $longTrip = Trip::create([
                         'start_destination_id' => $cairo->id,
                         'end_destination_id' => $aswan->id,
@@ -58,7 +59,6 @@ class DatabaseSeeder extends Seeder
                     ]);
                 }
                 if (Bus::count() == 0) {
-
                     $shortTripBus = $shortTrip->buses()->create([
                         'title' => 'Short Trip Bus',
                         'price' => 180
@@ -69,24 +69,30 @@ class DatabaseSeeder extends Seeder
                         'price' => 100
                     ]);
 
+                    Slot::factory()->count(2)->create([
+                        'bus_id' => $shortTripBus->id
+                    ]);
+                    Slot::factory()->count(2)->create([
+                        'bus_id' => $longTripBus->id
+                    ]);
+
 
                     if (Seat::count() == 0) {
-                    }
-                    $seats = [];
-                    for ($i = 1; $i <= 10; $i++) {
-                        $seats[] = [
+                        $seats = [];
+                        for ($i = 1; $i <= 10; $i++) {
+                            $seats[] = [
                             'title' => "A$i"
                         ];
-                    }
-                    for ($i = 1; $i <= 10; $i++) {
-                        $seats[] = [
-                            'title' => "B$i"
-                        ];
-                    }
+                        }
+                        for ($i = 1; $i <= 10; $i++) {
+                            $seats[] = [
+                                'title' => "B$i"
+                            ];
+                        }
+                        $longTripBus->seats()->createMany($seats);
 
-                    $longTripBus->seats()->createMany($seats);
-
-                    $shortTripBus->seats()->createMany($seats);
+                        $shortTripBus->seats()->createMany($seats);
+                    }
                 }
             }
 

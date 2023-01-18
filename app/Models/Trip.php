@@ -31,6 +31,11 @@ class Trip extends Model
         'end_destination_id' => 'integer',
     ];
 
+    protected $with = [
+        'startDestination',
+        'endDestination',
+    ];
+
     public function buses()
     {
         return $this->hasMany(Bus::class);
@@ -38,7 +43,7 @@ class Trip extends Model
 
     public function slots()
     {
-        return $this->hasMany(\App\Models\TripSlot::class);
+        return $this->hasMany(\App\Models\Slot::class);
     }
 
     public function startDestination()

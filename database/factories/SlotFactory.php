@@ -2,18 +2,18 @@
 
 namespace Database\Factories;
 
+use App\Models\Bus;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Trip;
-use App\Models\TripSlot;
+use App\Models\Slot;
 
-class TripSlotFactory extends Factory
+class SlotFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = TripSlot::class;
+    protected $model = Slot::class;
 
     /**
      * Define the model's default state.
@@ -23,9 +23,9 @@ class TripSlotFactory extends Factory
     public function definition()
     {
         return [
-            'trip_id' => Trip::factory(),
+            'bus_id' => Bus::factory(),
             'time' => $this->faker->time(),
-            'date' => $this->faker->date()
+            'day_of_week' => $this->faker->numberBetween(1, 7)
         ];
     }
 }
