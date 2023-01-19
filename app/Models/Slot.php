@@ -50,4 +50,21 @@ class Slot extends Model
     {
         return $this->hasMany(Session::class);
     }
+
+    public function availableSeats()
+    {
+        $nextAvilableDate = $this->getNextAvailableDate();
+        $orderIds = Order::select('id')->where([
+            'bus_id' => $this->bus_id,
+            'slot_id' => $this->id,
+            'date' => $nextAvilableDate
+        ])->get();
+        
+        $takenSeatsIds = OrderSeat::select('seat_id')->whereIn('order_id', $orderIds)->get();
+
+        Seat::whereNotIn('id', $takenSeatsIds)->where('bus_id', $this->bus_id)->get();
+
+        return Seat::whereNotIn('id', $takenSeatsIds)->where('bus_id', $this->bus_id);
+
+    }
 }

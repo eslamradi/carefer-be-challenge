@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SessionRequest extends FormRequest
+class CreateOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,9 @@ class SessionRequest extends FormRequest
     public function rules()
     {
         return [
-            'slot_id' => 'required|exists:slots,id'
+            'slot_id' => 'required|exists:slots,id',
+            'seats' => 'required|array',
+            'seats.*' => 'required'
         ];
     }
 }

@@ -19,9 +19,9 @@ class BusesController extends Controller
         return UnifiedJsonResponse::success(['buses' => $buses]);
     }
 
-    public function getAvailableSeats($busId, $slotId, BusRepository $busRepository)
+    public function getAvailableSeats($slotId, BusRepository $busRepository)
     {
-        $seats = $busRepository->getAvailableSeats($busId, $slotId);
+        $seats = $busRepository->getAvailableSeats($slotId);
         return UnifiedJsonResponse::success(['seats' => $seats]);
     }
 }

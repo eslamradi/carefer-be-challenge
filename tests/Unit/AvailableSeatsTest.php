@@ -24,25 +24,22 @@ class AvailableSeatsTest extends TestCaseWithAcceptJson
      */
     public function test_some_seats_available()
     {
-        $bus = Bus::factory()->create();
-
         $trip = Trip::factory()->create();
 
-        $slot = Slot::factory()->create([
-            'bus_id' => $bus->id,
-        ]);
+        $slot = Slot::factory()->create();
 
         $seats = Seat::factory()->count(10)->create([
-            'bus_id' => $bus->id
+            'bus_id' => $slot->bus_id
         ]);
 
         $busRepository = new BusRepository();
 
-        $availableSeats = $busRepository->getAvailableSeats($bus->id, $slot->id);
+        $availableSeats = $busRepository->getAvailableSeats($slot->id);
+
         $this->assertTrue($availableSeats->count() == 10);
 
         $order = Order::factory()->create([
-            'bus_id' => $bus->id,
+            'bus_id' => $slot->bus_id,
             'trip_id' => $trip->id,
             'slot_id' => $slot->id,
             'date' => $slot->getNextAvailableDate()
@@ -58,12 +55,12 @@ class AvailableSeatsTest extends TestCaseWithAcceptJson
             'seat_id' => $seats->get(5)->id
         ]);
 
-        $availableSeats = $busRepository->getAvailableSeats($bus->id, $slot->id);
+        $availableSeats = $busRepository->getAvailableSeats($slot->id);
         $this->assertTrue($availableSeats->count() == 8);
 
         for ($i=0; $i < 3; $i++) {
             $order = Order::factory()->create([
-                'bus_id' => $bus->id,
+                'bus_id' => $slot->bus_id,
                 'trip_id' => $trip->id,
                 'slot_id' => $slot->id,
                 'date' => Carbon::parse($slot->getNextAvailableDate())->subDays(14)
@@ -85,7 +82,7 @@ class AvailableSeatsTest extends TestCaseWithAcceptJson
             ]);
         }
 
-        $availableSeats = $busRepository->getAvailableSeats($bus->id, $slot->id);
+        $availableSeats = $busRepository->getAvailableSeats($slot->id);
         $this->assertTrue($availableSeats->count() == 8);
     }
 }

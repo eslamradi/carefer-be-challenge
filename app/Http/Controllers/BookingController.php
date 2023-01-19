@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\InvalidSeatIdException;
 use App\Helpers\UnifiedJsonResponse;
+use App\Http\Requests\CreateOrderRequest;
 use App\Http\Requests\SessionRequest;
 use App\Models\Session;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Throwable;
 
 class BookingController extends Controller
 {
@@ -22,7 +25,19 @@ class BookingController extends Controller
         ], __('Session Started Successfuly'), 201);
     }
 
-    public function order()
+    public function order(CreateOrderRequest $request, OrderService $orderService)
     {
+        try {
+            [$order, $tickets] = $orderService->createOrder(auth()->user(), $request->validated());
+
+            return UnifiedJsonResponse::success([
+                'order' => $order,
+                'tickets' => $tickets,
+            ], __('Order Created Successfully'), 201);
+        } catch(InvalidSeatIdException $e) {
+            return UnifiedJsonResponse::error([], $e->getMessage(), 400);
+        } catch(Throwable $e) {
+            return UnifiedJsonResponse::error([], $e->getMessage(), 500);
+        }
     }
 }

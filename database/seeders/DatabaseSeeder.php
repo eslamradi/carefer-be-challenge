@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Bus;
 use App\Models\Destination;
+use App\Models\Discount;
 use App\Models\Seat;
 use App\Models\Trip;
 use App\Models\Slot;
@@ -94,6 +95,16 @@ class DatabaseSeeder extends Seeder
                         $shortTripBus->seats()->createMany($seats);
                     }
                 }
+            }
+
+            if (Discount::count() == 0) {
+                Discount::create([
+                    'title' => '5MORE',
+                    'seats_count' => 5,
+                    'percentage' => 10,
+                    'amount' => 0,
+                    'max_amount' => 100,
+                ]);
             }
 
 

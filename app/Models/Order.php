@@ -29,7 +29,7 @@ class Order extends Model
 
     public function discounts()
     {
-        return $this->hasMany(Discount::class);
+        return $this->hasManyThrough(Discount::class, OrderDiscount::class, 'order_id', 'id', 'id', 'discount_id');
     }
 
     public function seats()

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -54,5 +55,10 @@ class Trip extends Model
     public function endDestination()
     {
         return $this->belongsTo(Destination::class);
+    }
+
+    public function title()
+    {
+        return "{$this->startDestination->title} - {$this->endDestination->title}";
     }
 }

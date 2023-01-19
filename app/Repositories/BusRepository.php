@@ -41,18 +41,10 @@ class BusRepository
      * @param int $slotId
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getAvailableSeats(int $busId, int $slotId)
+    public function getAvailableSeats(int $slotId)
     {
         $slot = Slot::findOrFail($slotId);
-        $nextAvilableDate = $slot->getNextAvailableDate();
-        $orderIds = Order::select('id')->where([
-            'bus_id' => $busId,
-            'slot_id' => $slotId,
-            'date' => $nextAvilableDate
-        ])->get();
 
-        $takenSeatsIds = OrderSeat::select('seat_id')->whereIn('order_id', $orderIds)->get();
-
-        return $availableSeats = Seat::whereNotIn('id', $takenSeatsIds)->where('bus_id', $busId)->get();
+        return $availableSeats = $slot->availableSeats()->get();
     }
 }

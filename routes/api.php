@@ -33,7 +33,7 @@ Route::controller(TripsController::class)->group(function () {
 
 Route::controller(BusesController::class)->group(function () {
     Route::get('trip/{tripId}/buses', 'list');
-    Route::get('bus/{busId}/slot/{slotId}/available', 'getAvailableSeats');
+    Route::get('bus/slot/{slotId}/available', 'getAvailableSeats');
 });
 
 Route::controller(BookingController::class)->group(function () {
