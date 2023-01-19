@@ -13,6 +13,7 @@ use Tests\TestCase;
 
 class ListCustomersWithFrequentBookTest extends TestCase
 {
+    use DatabaseTransactions;
     // use DatabaseTransactions;
     /**
      * A basic unit test example.

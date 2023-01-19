@@ -12,6 +12,8 @@ use Tests\TestCaseWithAcceptJson;
 
 class SessionMiddlewareTest extends TestCaseWithAcceptJson
 {
+    use DatabaseTransactions;
+
     /**
      * A basic unit test example.
      *
@@ -19,8 +21,6 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
      */
     public function test_no_session()
     {
-        Session::truncate();
-        
         $user = User::factory()->customer()->create();
         $slot = Slot::factory()->create();
 
@@ -42,7 +42,7 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
             'slot_id' => $slot->id,
             'debug' => true
         ]);
-        
+
         $check = false;
         $middleware->handle($request, function ($req) use (&$check) {
             $check = true;
