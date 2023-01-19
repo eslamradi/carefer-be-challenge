@@ -59,6 +59,6 @@ class Trip extends Model
 
     public function title()
     {
-        return "{$this->startDestination->title} - {$this->endDestination->title}";
+        return "{$this->startDestination->title}-{$this->endDestination->title}";
     }
 }

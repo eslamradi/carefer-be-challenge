@@ -5,8 +5,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\BusesController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TripsController;
+use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\ValidateBookingSession;
+use App\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,5 +43,11 @@ Route::controller(BookingController::class)->group(function () {
     Route::middleware(['auth:api', ValidateBookingSession::class])->group(function () {
         Route::post('session/start', 'startSession')->name('session.start');
         Route::post('order', 'order');
+    });
+});
+
+Route::middleware(['auth:api', "role:".Role::ADMIN])->group(function () {
+    Route::controller(CustomerController::class)->group(function () {
+        Route::get('customer', 'list');
     });
 });
