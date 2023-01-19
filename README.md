@@ -37,18 +37,30 @@ Kindly follow the next steps in order to be able to run the application:
     docker-compose build && docker-compose up -d
     ```
 
-4. generate application key 
+4. install dependencies 
+
+    ```
+    docker-compose exec app composer install --no-interaction
+    ```
+
+5. generate application key 
 
     ```
     docker-compose exec app php artisan key:generate
     ```
-5. migrate database and seed test data 
+6. setup jwt 
+
+    ```
+    docker-compose exec app php artisan jwt:secret
+    ```
+
+7. migrate database and seed test data 
 
     ```
     docker-compose exec app php artisan migrate --seed
     ```
 
-6. run tests to make sure everything is okay 
+8. run tests to make sure everything is okay 
 
     ```
     docker-compose exec app php artisan test
