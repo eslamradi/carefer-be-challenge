@@ -21,6 +21,7 @@ class CreateBusesTable extends Migration
             $table->foreignId('trip_id')->constrained();
             $table->float('price', 8, 2);
             $table->boolean('active')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
 

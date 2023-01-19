@@ -20,6 +20,7 @@ class CreateSlotsTable extends Migration
             $table->foreignId('bus_id')->constrained();
             $table->time('time');
             $table->enum('day_of_week', [1,2,3,4,5,6,7]);
+            $table->softDeletes();
             $table->timestamps();
         });
 

@@ -18,6 +18,7 @@ class CreateDestinationsTable extends Migration
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
             $table->string('title', 255);
+            $table->softDeletes();
             $table->timestamps();
         });
 

@@ -19,6 +19,7 @@ class CreateSeatsTable extends Migration
             $table->id();
             $table->string('title', 255);
             $table->foreignId('bus_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
 
