@@ -51,7 +51,7 @@ Kindly follow the next steps in order to be able to run the application:
 By default the database migrations are run along with the container build, so now we need only to seed the database through the following command:
 
 ```
-docker-compose exec app db:seed
+docker-compose exec app php artisan db:seed
 ```
 
 # Testing the application
@@ -70,6 +70,15 @@ docker-compose exec app php artisan test
     Now through this logic the slot model is correlated to a bus and a trip instances, so we lock the session on the slot instance; meaning a user can request a session on a certain slot, so other users can request sessions on different time slots accordingly.
 
 - I have created a simple authorization flow as the orders crud operations should not be open to public so we have users with roles `customer` and `admin` and both are authenticated with a `jwt` token.
+
+- By default the application initialization is done with the container build through the containers entrypoint script located within `docker-compose/startup/build.sh` file that contains the following commands
+ 
+    ```
+    composer install --no-interaction --optimize-autoloader
+    php artisan key:generate
+    php artisan jwt:secret --always-no
+    php artisan migrate --force
+    ```
 
 
 
