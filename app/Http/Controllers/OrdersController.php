@@ -19,7 +19,7 @@ class OrdersController extends Controller
     public function show($id, OrderRepository $orderRepository)
     {
         $order = $orderRepository->getById($id);
-        $order->load(['user', 'trip', 'bus', 'seats']);
+        $order->load(['user', 'trip', 'bus', 'seats', 'discounts']);
         
         return UnifiedJsonResponse::success(['order' => $order]);
     }
