@@ -25,7 +25,7 @@ class SlotFactory extends Factory
         return [
             'bus_id' => Bus::factory(),
             'time' => $this->faker->time(),
-            'day_of_week' => $this->faker->numberBetween(1, 7)
+            'day_of_week' => $this->faker->numberBetween(0, 6)
         ];
     }
 }
