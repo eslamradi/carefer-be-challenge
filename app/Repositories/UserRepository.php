@@ -49,4 +49,9 @@ class UserRepository
             'role' => Role::ADMIN
         ]));
     }
+
+    public function customersWithFrequentBook()
+    {
+        return $customers = User::withFrequentBook();
+    }
 }

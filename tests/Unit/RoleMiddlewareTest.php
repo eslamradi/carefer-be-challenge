@@ -5,12 +5,14 @@ namespace Tests\Unit;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\TestCase;
 use Tests\TestCaseWithAcceptJson;
 
 class RoleMiddlewareTest extends TestCaseWithAcceptJson
 {
+    use DatabaseTransactions;
     /**
      * A basic unit test example.
      *

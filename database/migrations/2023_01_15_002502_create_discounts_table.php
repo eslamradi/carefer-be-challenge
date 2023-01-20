@@ -22,6 +22,7 @@ class CreateDiscountsTable extends Migration
             $table->float('percentage', 8, 2)->default('0');
             $table->float('amount', 8, 2)->default('0');
             $table->float('max_amount', 8, 2)->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 

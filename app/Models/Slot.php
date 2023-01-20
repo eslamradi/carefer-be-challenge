@@ -5,10 +5,12 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slot extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -59,12 +61,11 @@ class Slot extends Model
             'slot_id' => $this->id,
             'date' => $nextAvilableDate
         ])->get();
-        
+
         $takenSeatsIds = OrderSeat::select('seat_id')->whereIn('order_id', $orderIds)->get();
 
         Seat::whereNotIn('id', $takenSeatsIds)->where('bus_id', $this->bus_id)->get();
 
         return Seat::whereNotIn('id', $takenSeatsIds)->where('bus_id', $this->bus_id);
-
     }
 }

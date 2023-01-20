@@ -10,6 +10,7 @@ use App\Models\Discount;
 use App\Models\Seat;
 use App\Models\Trip;
 use App\Models\Slot;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -104,6 +105,13 @@ class DatabaseSeeder extends Seeder
                     'percentage' => 10,
                     'amount' => 0,
                     'max_amount' => 100,
+                ]);
+            }
+
+            if (User::admin()->count() == 0) {
+                User::factory()->admin()->create([
+                    'name' => 'admin',
+                    'email' => "admin@mail.com",
                 ]);
             }
 

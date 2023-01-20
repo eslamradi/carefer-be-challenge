@@ -20,6 +20,7 @@ class CreateTripsTable extends Migration
             $table->foreignId('start_destination_id')->constrained('destinations');
             $table->foreignId('end_destination_id')->constrained('destinations');
             $table->integer('distance');
+            $table->softDeletes();
             $table->timestamps();
         });
 
