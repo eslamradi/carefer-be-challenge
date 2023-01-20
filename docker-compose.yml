@@ -20,7 +20,7 @@ services:
     networks:
       - carefer
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
 
   nginx:
     image: nginx:alpine
@@ -33,6 +33,9 @@ services:
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - carefer
+    depends_on:
+      app:
+        condition: service_healthy
 
   app:
     tty: true
@@ -52,8 +55,10 @@ services:
     networks:
       - carefer
     depends_on:
-      db: 
+      db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "php", "artisan" ]
 
 networks:
   carefer:
