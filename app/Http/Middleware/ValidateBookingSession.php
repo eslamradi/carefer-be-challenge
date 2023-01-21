@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Helpers\UnifiedJsonResponse;
+use App\Models\Session;
 use App\Models\Slot;
 use Closure;
 use Illuminate\Http\Request;
@@ -29,19 +30,37 @@ class ValidateBookingSession
 
         $slot = Slot::findOrFail($slotId);
 
-        $session = $slot->session()->latest()->first();
+        $slotSession = $slot->sessions()->first();
 
-        if ($session && $session->isValid()) {
-            if ($session->user_id == auth()->user()->id && ! $request->is('api/session/start')) {
+        // if session on slot is active
+        if ($slotSession && $slotSession->isValid()) {
+            // check if session is started by user and not requesting another session
+            if ($slotSession->user_id == auth()->user()->id && $request->is('api/session/start')) {
+                return UnifiedJsonResponse::error([], __('You are allowed only one session at a time'), 403);
+            }
+            // check if session is started by user and working on the session
+            elseif ($slotSession->user_id == auth()->user()->id) {
                 return $next($request);
-            } else {
-                return UnifiedJsonResponse::error([], __('Slot is not available for reservation'), 403);
+            }
+            // session is started by other user, user not authorized
+            else {
+                return UnifiedJsonResponse::error([], __('Session is reserved'), 403);
             }
         }
+
+        $userSession = auth()->user()->sessions()->latest()->first();
+
+        // check if user requesting another session
+        if ($userSession && $userSession->isValid()) {
+            return UnifiedJsonResponse::error([], __('You are allowed only one session at a time'), 403);
+        }
+
+        // check if user is initialing a session
         if ($request->is('api/session/start')) {
             return $next($request);
-        } else {
-            return UnifiedJsonResponse::error([], __('Session is not initialized'), 403);
         }
+
+        // no session is intitialized
+        return UnifiedJsonResponse::error([], __('No session initialized'), 403);
     }
 }

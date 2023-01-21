@@ -26,16 +26,16 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
 
         $this->actingAs($user);
 
-        $request = Request::create('/api/order', 'POST', [
-            'slot_id' => $slot->id
-        ]);
-
         $middleware = new ValidateBookingSession();
 
-
+        $request = Request::create('/api/order', 'POST', [
+            'slot_id' => $slot->id,
+        ]);
+        
         $response = $middleware->handle($request, function () {
         });
-
+        
+        // dd($response);
         $this->assertEquals($response->getStatusCode(), 403);
 
         $request = Request::create('/api/session/start', 'POST', [
@@ -81,7 +81,7 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
 
         $this->actingAs($otherUser);
 
-        $request = Request::create('/api/order', 'POST', [
+        $request = Request::create('/api/session/start', 'POST', [
             'slot_id' => $slot->id
         ]);
 
@@ -117,5 +117,32 @@ class SessionMiddlewareTest extends TestCaseWithAcceptJson
         });
 
         $this->assertTrue($check);
+    }
+
+    public function test_user_can_have_one_session_only()
+    {
+        $user = User::factory()->customer()->create();
+        $slot = Slot::factory()->create();
+
+        $session = Session::factory()->create([
+            'slot_id' => $slot->id,
+            'user_id' => $user->id
+        ]);
+
+        $otherSlot = Slot::factory()->create();
+
+        $this->actingAs($user);
+
+        $middleware = new ValidateBookingSession();
+
+        $request = Request::create('/api/session/start', 'POST', [
+            'slot_id' => $otherSlot->id
+        ]);
+
+        $response = $middleware->handle($request, function () {
+        });
+
+        $this->assertEquals($response->getStatusCode(), 403);
+        
     }
 }

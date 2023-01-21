@@ -48,7 +48,7 @@ class Slot extends Model
         return $today->addDays($diff)->toDateString();
     }
 
-    public function session()
+    public function sessions()
     {
         return $this->hasMany(Session::class);
     }
