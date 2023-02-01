@@ -76,7 +76,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
 
-    public function scopeWithFrequentBook()
+    public function scopeWithFrequentBook($builder)
     {
         /***
             SELECT u.id, u.email, (
@@ -111,9 +111,9 @@ class User extends Authenticatable implements JWTSubject
          *  and could replace  with "users.*" to mitigate normal eloquent
          *  model with all parameters
          */
-        $query = $this->selectRaw("users.id, users.email, ({$subQuery->toSql()}) as 'frequentBook'")->where('role', Role::CUSTOMER);
+        $builder = $builder->selectRaw("users.id, users.email, ({$subQuery->toSql()}) as 'frequentBook'")->where('role', Role::CUSTOMER);
 
-        return $query;
+        return $builder;
     }
 
     public function scopeCustomer()
